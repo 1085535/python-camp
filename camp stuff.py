@@ -1,14 +1,24 @@
-age = 12
-name = "vihaan"
-fav_color="blue"
-fav_food="fried rice"
-lucky_number=9
-hobby = "tennis"
-hrsperwk = "5"
-print(f"My favorite hobby is {hobby} and i spend {hrsperwk} hours per week")
-print("hello")
-print("work please")
+print ("This is a madlibs generator ")
+print("Answer the prompts to create a hilarious story")
 
-print ("github is failing me")
+place = input("Enter a place: ")
+noun1 = input("Enter a noun: ")
+celebrity1 = input("Enter a famous celebrity: ")
+verb1 = input("Enter a verb: ")
+animal = input("Enter a animal: ")
+wacky_sport = input("Enter a wacky sport: ")
+relative = input ("Enter a relative: ")
+adjective1= input("Enter a adjective: ")
+noun_2 = input("Enter a noun: ")
+past_tense_verb = input ("Enter a past-tense verb: ")
+adjective2 = input("Enter a adjective: ")
 
-print("I am", name, "my favorite color is", fav_color,"and my favorite food is", fav_food, "hope i'll be lucky because my lucky number is", lucky_number,)
+story = f"""
+The other day I went to the {place} and ate {noun1}. Then I saw {celebrity1} {verb1} all over the place.
+Then I won a pet{animal} in a {wacky_sport} contest. My {relative} was very {adjective1}. Out of the blue
+a {noun_2}exploded. We all gathered around and {past_tense_verb}. To this day I've never had such a {adjective2} 
+day
+"""
+
+print ("Here's your madlibs story")
+print(story)
