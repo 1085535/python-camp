@@ -43,4 +43,4 @@ finalshower=float(showers)*shower
 finalcomputer=float(computer)*computers
 
 finalemissions=(finalstove)+(finalshower)+(finalcomputer)+(finallights)+(finaltransport)+(finalac)
-print("Your final CO2 emissions are", finalemissions, "kilos")
+print("Your final daily CO2 emissions are", finalemissions, "kilos")
