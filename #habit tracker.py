@@ -1,3 +1,8 @@
 #habit tracker
 
-print("hello world")
+import tkinter as tk
+
+window = tk.Tk()
+window.title("Habit Tracker")
+
+window.mainloop()
