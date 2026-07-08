@@ -5,15 +5,29 @@ pet_name=input("What is your pet name")
 pet_type=input("is your pet a dragon, cat, or dog")
 if pet_type!="dragon" and pet_type!="cat" and pet_type!="dog":
         print("invalid pet type")
-print("\nYour pet is hatched and is very happy to see you! He is great at shooting free throws somehow, and has mood swings ")
 
-hunger=100
-happiness=100
-health=3
-sleep=10
-water=5
-cleanliness=10
 
+if pet_type=="dog":
+    print(f"Your pet is a dog named {pet_name} He is very friendly and loves to play fetch. However he has mood swings.")
+    hunger=80
+    cleanliness=50
+    happiness=100
+    water=80
+    sleep=50
+if pet_type=="cat":
+    print(f"Your pet is a cat named {pet_name} He is very friendly and loves to play with yarn. However he has mood swings.")
+    hunger=60
+    cleanliness=80
+    happiness=60
+    water=80
+    sleep=100
+if pet_type=="dragon":
+    print(f"Your pet is a dragon named {pet_name} He is very friendly and loves to play with fire. However he has mood swings.")
+    hunger=100
+    cleanliness=20
+    happiness=80
+    water=40
+    sleep=60
 while True:
     
     
@@ -33,26 +47,26 @@ while True:
         print("\n sorry, that's not a valid move")
     
     if move=="feed":
-        hunger+=10
+        hunger+=30
     if move=="play":
-        happiness+=10
+        happiness+=30
     if move=="doctor":
-        health+=2
+        health+=30
     if move=="sleep":
-        sleep+=3
+        sleep+=30
     if move=="water":
-        water+=3
+        water+=30
     if move=="clean":
-        cleanliness+=5
+        cleanliness+=30
 
     if move!="clean":
-        cleanliness-=0.25
+        cleanliness-=10
     if move!="water":
-        water-=0.25
+        water-=10
     if move!="sleep":
-        sleep-=2
+        sleep-=10
     if move!="doctor":
-        health-=0.5
+        health-=10
     if move!="play":
         happiness-=20
     if move!="feed":
