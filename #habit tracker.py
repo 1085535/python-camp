@@ -25,7 +25,4 @@ entry_widget.pack()
 
 habits=[]
 
-
-    
-
 window.mainloop()
