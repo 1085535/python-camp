@@ -8,4 +8,3 @@ class Player:
         return f"(self.playername)'s stats are
 my_stats= stats ("Sharvil, {"Health": 100","Stamina":50 })
        
-print("hola como estas")
