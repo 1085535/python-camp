@@ -10,7 +10,7 @@ electricalstove=0.3
 ac1=2.5
 natgas=0.45
 
-print("welcome...to my information steal-i mean my calculator")
+print("welcome to my CO2 calculator")
 transport= input("How did you come here today?")
 miles = input("how many miles did you travel")
 food =input("How many meals cooked per day")
