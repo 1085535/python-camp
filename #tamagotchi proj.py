@@ -14,6 +14,7 @@ if pet_type=="dog":
     happiness=100
     water=80
     sleep=50
+    health=50
 if pet_type=="cat":
     print(f"Your pet is a cat named {pet_name} He is very friendly and loves to play with yarn. However he has mood swings.")
     hunger=60
@@ -21,6 +22,7 @@ if pet_type=="cat":
     happiness=60
     water=80
     sleep=100
+    health=50
 if pet_type=="dragon":
     print(f"Your pet is a dragon named {pet_name} He is very friendly and loves to play with fire. However he has mood swings.")
     hunger=100
@@ -28,6 +30,7 @@ if pet_type=="dragon":
     happiness=80
     water=40
     sleep=60
+    health=50
 while True:
     
     
