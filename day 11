@@ -1,0 +1,16 @@
+import matplotlib.pyplot as plt
+
+# Define the categories and their corresponding values
+categories = ['Apples', 'Bananas', 'Cherries', 'Dates']
+values = [400, 350, 300, 450]
+
+# Create the vertical bar chart
+plt.bar(categories, values, color='skyblue')
+
+# Add titles and labels for clarity
+plt.title('Fruit Sales Overview')
+plt.xlabel('Fruit Types')
+plt.ylabel('Units Sold')
+
+# Display the graph
+plt.show()
