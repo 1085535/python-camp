@@ -1,0 +1,38 @@
+import pygame
+import sys
+
+# Start Pygame
+pygame.init()
+
+# Create an 800x600 window
+screen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("Drawing Rectangles")
+
+# Main Loop
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # 1. Clear the screen with a dark gray background
+    screen.fill((40, 40, 40))
+
+    # 2. Draw a RED square in the top-left corner
+    # Start at x=50, y=50. Make it 100 wide and 100 tall.
+    pygame.draw.rect(screen, (255, 0, 0), (50, 50, 100, 100))
+
+    # 3. Draw a GREEN rectangle near the center
+    # Start at x=350, y=250. Make it 150 wide and 80 tall.
+    pygame.draw.rect(screen, (0, 255, 0), (350, 255, 150, 80))
+
+    # 4. Draw a BLUE "floor" at the bottom
+    # Start at x=0, y=500. Make it 800 wide (full screen) and 100 tall.
+    pygame.draw.rect(screen, (0, 100, 255), (0, 500, 800, 100))
+
+    # 5. Show everything we just drew on the screen
+    pygame.display.flip()
+
+# Quit safely
+pygame.quit()
+sys.exit()
