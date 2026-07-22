@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Tracker</title>
+    <!-- Canvas Confetti Library for completion animations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            background-color: #121214;
+            color: #E0E0E0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #FFFFFF;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        /* Expander Box for Add Habit */
+        details {
+            background-color: #1E1E24;
+            border: 1px solid #2D2D38;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 25px;
+        }
+
+        summary {
+            font-weight: bold;
+            color: #FFFFFF;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            color: #8E8E93;
+        }
+
+        input, select {
+            background-color: #2C2C35;
+            border: 1px solid #3A3A46;
+            color: #FFFFFF;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        input[type="color"] {
+            padding: 2px;
+            height: 40px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            background-color: #3A3A46;
+            border: 1px solid #4A4A58;
+            color: #FFF;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-submit:hover { background-color: #4A4A58; }
+
+        /* Navigation Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #2D2D38;
+            padding-bottom: 12px;
+        }
+
+        .tab-btn {
+            background: #1E1E24;
+            border: 1px solid #2D2D38;
+            color: #8E8E93;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .tab-btn.active {
+            background: #2C2C35;
+            color: #FFFFFF;
+            border-color: #3A3A46;
+        }
+
+        /* Habit Cards Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #1E1E24;
+            border: 1px solid #2D2D38;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .card h3 {
+            margin: 0 0 4px 0;
+            font-size: 1.15rem;
+            color: #FFFFFF;
+        }
+
+        .card .streak {
+            margin: 0;
+            color: #8E8E93;
+            font-size: 0.85rem;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-step {
+            flex: 4;
+            background-color: #2C2C35;
+            border: 1px solid #3A3A46;
+            color: #FFF;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-step:disabled {
+            background-color: #1A2E1A;
+            border-color: #2E4A2E;
+            color: #8FBF8F;
+            cursor: default;
+        }
+
+        .btn-delete {
+            flex: 1;
+            background-color: #2C2C35;
+            border: 1px solid #3A3A46;
+            color: #FFF;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-delete:hover { background-color: #3A2323; border-color: #5A2D2D; }
+    </style>
+</head>
+<body>
+
+    <h1>🎯 Habit Tracker</h1>
+
+    <!-- Add Habit Expander Form -->
+    <details>
+        <summary>➕ Add New Habit</summary>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Habit Name</label>
+                <input type="text" id="newName" placeholder="e.g. Read 20 mins">
+            </div>
+            <div class="form-group">
+                <label>Target Goal</label>
+                <input type="number" id="newGoal" value="1" min="1">
+            </div>
+            <div class="form-group">
+                <label>Frequency</label>
+                <select id="newPeriod">
+                    <option value="Daily">Daily</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Yearly">Yearly</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Color Accent</label>
+                <input type="color" id="newColor" value="#D97A7A">
+            </div>
+            <button class="btn-submit" onclick="addHabit()">Save Habit</button>
+        </div>
+    </details>
+
+    <!-- Period Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('Daily')">Daily</button>
+        <button class="tab-btn" onclick="switchTab('Monthly')">Monthly</button>
+        <button class="tab-btn" onclick="switchTab('Yearly')">Yearly</button>
+    </div>
+
+    <!-- Habit Grid -->
+    <div class="grid" id="habit-grid"></div>
+
+    <script>
+        let currentTab = "Daily";
+        let habitsData = [];
+
+        async function loadHabits() {
+            const res = await fetch('/api/habits');
+            habitsData = await res.json();
+            render();
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText === tab);
+            });
+            render();
+        }
+
+        function renderProgressRing(current, goal, color) {
+            const pct = Math.min(1.0, current / goal);
+            const radius = 38;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference * (1 - pct);
+
+            return `
+                <svg width="110" height="110" viewBox="0 0 100 100" style="display:block; margin: 12px auto;">
+                    <circle cx="50" cy="50" r="${radius}" stroke="#2C2C35" stroke-width="7" fill="none" />
+                    <circle cx="50" cy="50" r="${radius}" stroke="${color}" stroke-width="7" fill="none"
+                        stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
+                        stroke-linecap="round" transform="rotate(-90 50 50)"
+                        style="transition: stroke-dashoffset 0.4s ease;" />
+                    <text x="50" y="55" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
+                        ${current}/${goal}
+                    </text>
+                </svg>
+            `;
+        }
+
+        function render() {
+            const grid = document.getElementById('habit-grid');
+            grid.innerHTML = '';
+
+            const periodWord = currentTab === 'Daily' ? 'days' : currentTab === 'Monthly' ? 'months' : 'years';
+
+            habitsData.forEach((habit, idx) => {
+                if (habit.period !== currentTab) return;
+
+                const isComplete = habit.current >= habit.goal;
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                card.innerHTML = `
+                    <h3>${habit.name}</h3>
+                    <p class="streak">🔥 Streak: ${habit.streak || 0} ${periodWord}</p>
+                    ${renderProgressRing(habit.current, habit.goal, habit.color)}
+                    <div class="card-actions">
+                        <button class="btn-step" ${isComplete ? 'disabled' : ''} onclick="increment(${idx})">
+                            ${isComplete ? 'Completed! 🎉' : '+1 Step'}
+                        </button>
+                        <button class="btn-delete" onclick="deleteHabit(${idx})">🗑️</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        async function increment(idx) {
+            const habit = habitsData[idx];
+            const wasComplete = habit.current >= habit.goal;
+
+            const res = await fetch('/api/habits/increment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ index: idx })
+            });
+
+            if ((habit.current + 1) >= habit.goal && !wasComplete) {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            }
+
+            loadHabits();
+        }
+
+        async function addHabit() {
+            const name = document.getElementById('newName').value.trim();
+            const goal = document.getElementById('newGoal').value;
+            const period = document.getElementById('newPeriod').value;
+            const color = document.getElementById('newColor').value;
+
+            if (!name) return;
+
+            await fetch('/api/habits/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, goal, period, color })
+            });
+
+            document.getElementById('newName').value = '';
+            loadHabits();
+        }
+
+        async function deleteHabit(idx) {
+            await fetch('/api/habits/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ index: idx })
+            });
+            loadHabits();
+        }
+
+        loadHabits();
+    </script>
+</body>
+</html>
