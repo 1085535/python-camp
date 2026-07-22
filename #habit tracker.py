@@ -339,7 +339,75 @@ def on_goal_leave(event):
     if goal_entry.get() == "":
         goal_entry.insert(0, "Goal (e.g. 8)")
         goal_entry.config(fg="gray")
+def open_add_habit_window(default_period, habit=None):
+    global entry_widget, goal_entry, add_window, selected_color
 
+    selected_color = PRESET_COLORS[0]
+
+    add_window = tk.Toplevel(window)
+    add_window.title("New Habit")
+    add_window.configure(bg=BG_COLOR)
+
+    popup_width = 360
+    popup_height = 480
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
+    x = (screen_width - popup_width) // 2
+    y = (screen_height - popup_height) // 2
+    add_window.geometry(f"{popup_width}x{popup_height}+{x}+{y}")
+    add_window.resizable(False, False)
+
+    tk.Label(add_window, text="New Habit", font=HEADER_FONT, bg=BG_COLOR, fg=TEXT_COLOR).pack(pady=10)
+
+    entry_widget = tk.Entry(add_window, font=BODY_FONT)
+    entry_widget.insert(0, "New habit...")
+    entry_widget.config(fg="gray")
+    entry_widget.bind("<FocusIn>", on_name_click)
+    entry_widget.bind("<FocusOut>", on_name_leave)
+    entry_widget.pack(pady=5)
+
+    goal_entry = tk.Entry(add_window, font=BODY_FONT)
+    goal_entry.insert(0, "Goal (e.g. 8)")
+    goal_entry.config(fg="gray")
+    goal_entry.bind("<FocusIn>", on_goal_click)
+    goal_entry.bind("<FocusOut>", on_goal_leave)
+    goal_entry.pack(pady=5)
+
+    period_var.set(default_period)
+    period_menu = tk.OptionMenu(add_window, period_var, "Daily", "Monthly", "Yearly")
+    period_menu.config(highlightthickness=0, bd=0, relief=tk.FLAT)
+    period_menu.pack(pady=5)
+
+    tk.Label(add_window, text="Pick a color", font=BODY_FONT, bg=BG_COLOR, fg=TEXT_COLOR).pack(pady=(10, 5))
+
+    swatch_frame = tk.Frame(add_window, bg=BG_COLOR)
+    swatch_frame.pack(pady=5)
+
+    swatch_buttons = []
+    for color in PRESET_COLORS:
+        b = tk.Button(swatch_frame, bg=color, width=2, height=1,
+                      relief=tk.FLAT, highlightthickness=0)
+        b.pack(side="left", padx=3)
+        swatch_buttons.append(b)
+
+    for color, b in zip(PRESET_COLORS, swatch_buttons):
+        b.config(command=lambda c=color, btn=b: select_preset_color(c, btn, swatch_buttons))
+
+    swatch_buttons[0].config(highlightthickness=3, highlightbackground="black")
+
+    add_button = tk.Button(
+        add_window,
+        text="Add Habit",
+        bg="black",
+        fg="white",
+        activebackground="#333333",
+        activeforeground="white",
+        relief=tk.FLAT,
+        highlightthickness=0,
+        bd=0,
+        command=addfunc
+    )
+    add_button.pack(pady=20)
 window = tk.Tk()
 window.title("Habit Tracker")
 window.geometry("950x700")
