@@ -31,7 +31,7 @@ MILESTONE_LABELS = {
     100: "100 Day Legend! 🏆"
 }
 
-HEAT_COLORS = ["#EDEBE6", "#D9C2A3", "#C9965E", "#B36B3D", "#8C4A24"]
+HEAT_COLORS = ["#FFF6D6", "#FFE066", "#FFB13D", "#FF7A3D", "#D62839"]
 
 rendered_canvases = {}
 
@@ -290,9 +290,7 @@ def check_reminders():
         if habit.get("last_reminder_date") == today_str:
             continue
 
-        current_key = get_period_key(habit["period"], date.today())
-        is_done_now = (habit["last_completed"] == current_key and habit["current"] >= habit["goal"])
-        if is_done_now:
+        if habit["current"] >= habit["goal"]:
             continue
 
         if current_time_str >= reminder_time:
@@ -394,23 +392,24 @@ def open_calendar_heatmap_window():
     tk.Label(heat_win, text="🔥 Activity Heatmap", font=TITLE_FONT, bg=BG_COLOR, fg=TEXT_COLOR).pack(pady=(15, 5))
     tk.Label(heat_win, text="Last 12 weeks of activity", font=BODY_FONT, bg=BG_COLOR, fg=SUBTEXT_COLOR).pack(pady=(0, 10))
 
-    heat_canvas = tk.Canvas(heat_win, width=580, height=140, bg=BG_COLOR, highlightthickness=0)
-    heat_canvas.pack(pady=5)
-
     cell_size = 16
     cell_gap = 4
     weeks = 12
+    total_columns = weeks + 1
+
+    canvas_width = total_columns * (cell_size + cell_gap) - cell_gap
+    canvas_height = 7 * (cell_size + cell_gap) - cell_gap
+
+    heat_canvas = tk.Canvas(heat_win, width=canvas_width, height=canvas_height, bg=BG_COLOR, highlightthickness=0)
+    heat_canvas.pack(pady=5)
 
     today = date.today()
     start_day = today - timedelta(days=(weeks * 7 - 1))
     grid_start = start_day - timedelta(days=start_day.weekday())
 
-    for week in range(weeks + 1):
+    for week in range(total_columns):
         for day_of_week in range(7):
             current_day = grid_start + timedelta(days=(week * 7 + day_of_week))
-            if current_day > today:
-                continue
-
             day_str = str(current_day)
             count = activity_log.get(day_str, 0)
             color = get_heat_color(count)
@@ -713,7 +712,9 @@ def mark_done(habit):
         habit["current"] = 0
         habit["last_active"] = current_key
 
-    was_completed = (habit["current"] >= habit["goal"])
+    if habit["current"] >= habit["goal"]:
+        return
+
     habit["current"] += 1
     now_completed = (habit["current"] >= habit["goal"])
 
@@ -721,7 +722,7 @@ def mark_done(habit):
     activity_log[today_str] = activity_log.get(today_str, 0) + 1
     save_activity_log()
 
-    if now_completed and not was_completed:
+    if now_completed:
         previous_key = get_previous_period_key(habit["period"], today)
 
         if habit["last_completed"] != current_key:
@@ -808,8 +809,7 @@ def render_period(period, container):
         center_text = str(habit["current"]) + "/" + str(habit["goal"])
         ring_canvas.create_text(60, 60, text=center_text, fill=text_color, font=("Segoe UI", 14, "bold"))
 
-        current_key = get_period_key(habit["period"], date.today())
-        is_done_now = (habit["last_completed"] == current_key and habit["current"] >= habit["goal"])
+        is_done_now = habit["current"] >= habit["goal"]
 
         if not is_done_now:
             ring_canvas.bind("<Button-1>", lambda event, h=habit: mark_done(h))
