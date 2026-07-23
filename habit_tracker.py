@@ -655,6 +655,9 @@ def open_edit_habit_window(target_habit):
         target_habit["color"] = selected_color
         target_habit["reminder_time"] = parse_reminder_time(raw_reminder)
 
+        if target_habit["current"] > goal_num:
+            target_habit["current"] = goal_num
+
         save_habits()
         edit_window.destroy()
         render_all_habits()
